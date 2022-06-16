@@ -1,0 +1,3 @@
+- doc: template
+  href: .template/_info.md
+  index: .template/_toc.yaml
