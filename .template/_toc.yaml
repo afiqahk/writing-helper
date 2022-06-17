@@ -1,22 +1,20 @@
 chapters:
-- title: nan
+- title: abc
   parts:
-  - name: nan
-    href:    
-  - name: nan
-    href:    
-- title: nan
+  - name: part1
+    href: part1.md   
+  - name: part2
+    href: part2.md
+- title: def
   parts:
-  - name: nan
-    href:    
-  - name: nan
-    href:    
+  - name: part3
+    href: part3.md
 extras:
-- section:
+- title: extra1
   parts:
-  - name:
-    href:
-- section:
+  - name: extra1
+    href: extra1.md
+- title: extra2
   parts:
-  - name:
-    href:
+  - name: extra2
+    href: extra2.md
