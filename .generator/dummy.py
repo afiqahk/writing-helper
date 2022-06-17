@@ -39,4 +39,7 @@ class dummy:
 d = dummy(res['parts'])
 print(d.read())
 print(d.read())
-print(d.read())
+# print(d.read())
+
+with open("test.md", 'a') as f:
+    f.write("\n---\n")
