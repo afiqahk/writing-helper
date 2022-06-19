@@ -20,16 +20,15 @@ class Merger:
         Create destination .md file
         """        
         if self.chapter is not None:
-            self.dest = pathlib.Path() / "tmp" / f"{self.doc}_{self.chapter}.md"
+            self.dest = pathlib.Path() / "_out" / f"{self.doc}_{self.chapter}.md"
         elif self.extra is not None:
-            self.dest = pathlib.Path() / "tmp" / f"{self.doc}_{self.extra}.md"
+            self.dest = pathlib.Path() / "_out" / f"{self.doc}_{self.extra}.md"
         else:
             raise RuntimeError('Merger: no item type specified!')
         
         logging.info(f"Merger: write to {self.dest}")
         dest_root = self.dest.parent()
-        shutil.rmtree(dest_root, ignore_errors=True)
-        dest_root.mkdir(parents=True)
+        dest_root.mkdir(parents=True, exist_ok=True)
         return
 
     def add(self, part):
