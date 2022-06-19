@@ -9,6 +9,7 @@ chapters:
   parts:
   - name: part3
     href: part3.md
+
 extras:
 - title: extra1
   parts:
