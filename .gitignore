@@ -1,1 +1,6 @@
+# local
 TODO
+_out/
+
+# python
+__pycache__/

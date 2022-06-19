@@ -1,6 +1,5 @@
 import logging
 import pathlib
-import shutil
 
 class Merger:
     def __init__(self, args):
@@ -27,16 +26,16 @@ class Merger:
             raise RuntimeError('Merger: no item type specified!')
         
         logging.info(f"Merger: write to {self.dest}")
-        dest_root = self.dest.parent()
+        dest_root = self.dest.parent
         dest_root.mkdir(parents=True, exist_ok=True)
         return
 
     def add(self, part):
         src = self.source / part['href']
-        with open(src, 'r') as fin, open(self.dest / ".tmp", 'a') as fout:
+        with open(src, 'r') as fin, open(self.dest.parent / (self.dest.name + ".tmp"), 'a') as fout:
             for line in fin:
                 fout.write(line)
-            fout.write("\n---\n") # insert horizontal rule at end of part
+            fout.write("\n\n---\n\n") # insert horizontal rule at end of part
         logging.info(f"Merger: added part {part['name']} from {src}")
         return
     
@@ -45,10 +44,12 @@ class Merger:
         Remove the last <hr/>
         """
         try:
-            with open(self.dest / ".tmp", 'r') as f:
+            tempfile = self.dest.parent / (self.dest.name + ".tmp")
+            with open(tempfile, 'r') as f:
                 lines = f.readlines()
             with open(self.dest, 'w') as f:
                 f.writelines(lines[:-3])
+            tempfile.unlink()
         except Exception as e:
             logging.warning("Auto-clean fail, please check formatting manually")
         return

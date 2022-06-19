@@ -39,6 +39,8 @@ class TableofContents:
             self.toc = self._find_item(a.extra)
         else:
             raise RuntimeError('TOC: no item type specified!')
+        if self.toc is not None:
+            self.toc = self.toc['parts']
         return
     
     def _find_item(self, title):
