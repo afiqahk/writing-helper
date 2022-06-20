@@ -31,15 +31,15 @@ class TableofContents:
             toc = yaml.load(f, Loader=yaml.SafeLoader)
         a = self.args
         if a.chapter:
-            logging.info(f"TOC: using chapter {a.chapter}")
+            logging.info(f" TOC: using chapter '{a.chapter}'")
             self.toc = toc["chapters"]
             self.toc = self._find_item(a.chapter)
         elif a.extra:
-            logging.info(f"TOC: using extra {a.extra}")
+            logging.info(f" TOC: using extra '{a.extra}'")
             self.toc = toc["extras"]
             self.toc = self._find_item(a.extra)
         else:
-            raise RuntimeError('TOC: no item type specified!')
+            raise RuntimeError(' TOC: no item type specified!')
         if self.toc is not None:
             self.toc = self.toc['parts']
         return
@@ -47,13 +47,13 @@ class TableofContents:
     def _find_item(self, title):
         res = next((x for x in self.toc if x['title'] == title), None)
         if res is None:
-            logging.warning(f"TOC: {title} not found")
+            logging.warning(f" TOC: '{title}' not found")
         return res
 
     def read(self):
         res = self.toc[self.counter:self.counter+1]
         if not res:
-            logging.warning("TOC: reached end")
+            logging.info(" TOC: reached end")
             return None
         self.counter +=1
         return res[0]

@@ -26,7 +26,7 @@ class Merger:
         else:
             raise RuntimeError('Merger: no item type specified!')
         
-        logging.info(f"Merger: write to {self.dest}")
+        logging.info(f" Merger: write to '{self.dest}'")
         dest_root = self.dest.parent
         dest_root.mkdir(parents=True, exist_ok=True)
         return
@@ -37,7 +37,7 @@ class Merger:
             for line in fin:
                 fout.write(line)
             fout.write("\n\n---\n\n") # insert horizontal rule at end of part
-        logging.info(f"Merger: added part {part['name']} from {src}")
+        logging.info(f" Merger: added part '{part['name']}' from '{src}'")
         return
     
     def clean(self):
@@ -52,5 +52,5 @@ class Merger:
                 f.writelines(lines[:-3])
             tempfile.unlink()
         except Exception as e:
-            logging.warning("Auto-clean fail, please check formatting manually")
+            logging.error(" Auto-clean fail, please check formatting manually")
         return
