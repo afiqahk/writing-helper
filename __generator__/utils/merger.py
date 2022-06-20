@@ -18,10 +18,11 @@ class Merger:
         Remove old destination folder and create a new one
         Create destination .md file
         """        
+        OUT_FOLDER = "__out__"
         if self.chapter is not None:
-            self.dest = pathlib.Path() / "_out" / f"{self.doc}_{self.chapter}.md"
+            self.dest = pathlib.Path() / OUT_FOLDER / f"{self.doc}_{self.chapter}.md"
         elif self.extra is not None:
-            self.dest = pathlib.Path() / "_out" / f"{self.doc}_{self.extra}.md"
+            self.dest = pathlib.Path() / OUT_FOLDER / f"{self.doc}_{self.extra}.md"
         else:
             raise RuntimeError('Merger: no item type specified!')
         

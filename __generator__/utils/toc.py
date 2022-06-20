@@ -20,14 +20,15 @@ class TableofContents:
         self.args = args
         self.doc = args.doc
         self.toc = None
+        self.tocpath = None
         self.counter = 0
         self._open()
         return
     
     def _open(self):
-        tocpath = pathlib.Path() / self.doc / "_toc.yaml"
-        with open(tocpath, 'r') as f:
-            toc = yaml.load(f, Loader=yaml.FullLoader)
+        self.tocpath = pathlib.Path() / self.doc / "_toc.yaml"
+        with open(self.tocpath, 'r') as f:
+            toc = yaml.load(f, Loader=yaml.SafeLoader)
         a = self.args
         if a.chapter:
             logging.info(f"TOC: using chapter {a.chapter}")

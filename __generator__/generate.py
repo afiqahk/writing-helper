@@ -19,14 +19,18 @@ def loop_and_merge(toc, merger):
     merger.clean()
     return
 
-def main():
-    args = parse_args()
-
+def run(**kwargs):
+    args = argparse.Namespace(**kwargs)
     toc = TableofContents(args)
     merger = Merger(args)
     if not toc.toc:
-        raise SystemExit("ERROR: can't open toc item requested")    
+        raise SystemExit(f"ERROR: can't open toc item requested at {toc.tocpath.resolve()}")    
     loop_and_merge(toc, merger)
+    return
+
+def main():    
+    args = parse_args()
+    run(**vars(args))
     return
 
 if __name__=="__main__":
