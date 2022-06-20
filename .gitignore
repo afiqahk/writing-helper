@@ -2,6 +2,7 @@
 TODO
 __out__/
 .vscode/
+*.zip
 
 # python
 __pycache__/

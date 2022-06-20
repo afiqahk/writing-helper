@@ -3,6 +3,8 @@
 import pypandoc
 import argparse
 import logging
+import glob
+import pathlib
 
 def parse_args():
     """Parse input arguments."""
@@ -14,7 +16,7 @@ def parse_args():
              " file in current directory, 'chapter1.docx'"
              " file in another directory, 'book1/chapter1.docx'"
              " full path, 'D:/chapter1.docx'"
-             " pattern, 'book1/*.docx'")
+             " pattern, 'book1/*.docx' (default is merge into one output, else set --multi_output)")
     parser.add_argument(
         '--format', type=str, required=True,
         help="Format to convert to (without the dot '.'), e.g.: "
@@ -26,18 +28,32 @@ def parse_args():
              " file in current directory, 'chapter1.md'"
              " file in another directory, 'book1/chapter1.md'"
              " full path, 'D:/chapter1.md'")
+    parser.add_argument(
+        '--multi_output', type=str, default=None,
+        help="Output folder if input is a pattern and you want separate output files"
+             "e.g.: 'book1")
     args = parser.parse_args()
     return args
+
+def convert(input, format, output):
+    out = pypandoc.convert_file(input, format, outputfile=output)
+    if out == "":
+        print(f"Succesfully converted '{input}' to '{output}'")
+    else:
+        raise SystemExit(f"ERROR: can't convert requested item, {input}")
+    return
 
 def run(**kwargs):
     args = argparse.Namespace(**kwargs)
     try:
-        output = pypandoc.convert_file(args.input, args.format, outputfile=args.output)
-        if output == "":
-            print(f"Succesfully converted '{args.input}' to '{args.output}'")
+        if args.multi_output is not None:
+            for file in glob.glob(args.input):
+                outfile = str(pathlib.Path(args.multi_output) / (pathlib.Path(file).stem + f'.{args.format}') )
+                convert(file, args.format, outfile)
         else:
-            raise SystemExit(f"ERROR: can't convert requested item, {args.input}")
+            convert(args.input, args.format, args.output)        
     except Exception as e:
+        # logging.exception(" " + str(e))
         logging.error(" " + str(e))
     return
 

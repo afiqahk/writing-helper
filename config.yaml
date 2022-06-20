@@ -7,3 +7,4 @@ convert:
  input: "__out__/__template___loremipsum1.md"
  format: "html"
  output: "__out__/__template__loremipsum1.html"
+ multi_output: "__out__"
