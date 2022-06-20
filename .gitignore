@@ -1,6 +1,11 @@
 # local
 TODO
 __out__/
+.vscode/
 
 # python
 __pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.log
