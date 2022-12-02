@@ -1,7 +1,6 @@
 merge:
  doc: "__template__"     # required
  chapter: "loremipsum1"  # default: ""
- extra: ""               # default: ""
 
 convert:
  input: "__out__/__template___loremipsum1.md"

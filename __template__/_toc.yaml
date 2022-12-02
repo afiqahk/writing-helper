@@ -5,16 +5,17 @@ chapters:
     href: part1.md   
   - name: part2
     href: part2.md
+
 - title: loremipsum2
   parts:
   - name: part3
     href: part3.md
 
-extras:
 - title: loremipsum3
   parts:
   - name: extra1
     href: extra1.md
+
 - title: loremipsum4
   parts:
   - name: extra2

@@ -1,3 +1,5 @@
+unicode character: ō.
+
 Circes adfusique Iovi percussit flumina sanguine sidere vires cortice; *ante*
 possit aderant, omnibus tulit depulerant te ergo. Cleonae petunt.
 

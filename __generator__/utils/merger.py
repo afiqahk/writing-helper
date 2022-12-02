@@ -5,7 +5,6 @@ class Merger:
     def __init__(self, args):
         self.doc = args.doc
         self.chapter = args.chapter
-        self.extra = args.extra
         self.source = pathlib.Path() / self.doc 
         self.dest = None
         self._setup_dest()
@@ -21,8 +20,6 @@ class Merger:
         OUT_FOLDER = "__out__"
         if self.chapter is not None:
             self.dest = pathlib.Path() / OUT_FOLDER / f"{self.doc}_{self.chapter}.md"
-        elif self.extra is not None:
-            self.dest = pathlib.Path() / OUT_FOLDER / f"{self.doc}_{self.extra}.md"
         else:
             raise RuntimeError('Merger: no item type specified!')
         
@@ -33,7 +30,7 @@ class Merger:
 
     def add(self, part):
         src = self.source / part['href']
-        with open(src, 'r') as fin, open(self.dest.parent / (self.dest.name + ".tmp"), 'a') as fout:
+        with open(src, 'r', encoding="utf8") as fin, open(self.dest.parent / (self.dest.name + ".tmp"), 'a', encoding="utf8") as fout:
             for line in fin:
                 fout.write(line)
             fout.write("\n\n---\n\n") # insert horizontal rule at end of part
@@ -46,11 +43,12 @@ class Merger:
         """
         try:
             tempfile = self.dest.parent / (self.dest.name + ".tmp")
-            with open(tempfile, 'r') as f:
+            with open(tempfile, 'r', encoding="utf8") as f:
                 lines = f.readlines()
-            with open(self.dest, 'w') as f:
+            with open(self.dest, 'w', encoding="utf8") as f:
                 f.writelines(lines[:-3])
             tempfile.unlink()
         except Exception as e:
-            logging.error(" Auto-clean fail, please check formatting manually")
+            logging.error(" Auto-clean fail, please check formatting manually. Error:")
+            logging.error(e)
         return

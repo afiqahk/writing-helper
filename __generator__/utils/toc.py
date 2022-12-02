@@ -10,9 +10,6 @@ def add_toc_args(parser):
     parser.add_argument(
         '--chapter', type=str, default=None,
         help="Name of chapter title")
-    parser.add_argument(
-        '--extra', type=str, default=None,
-        help="Name of extra section title")
     return parser
 
 class TableofContents:
@@ -34,10 +31,6 @@ class TableofContents:
             logging.info(f" TOC: using chapter '{a.chapter}'")
             self.toc = toc["chapters"]
             self.toc = self._find_item(a.chapter)
-        elif a.extra:
-            logging.info(f" TOC: using extra '{a.extra}'")
-            self.toc = toc["extras"]
-            self.toc = self._find_item(a.extra)
         else:
             raise RuntimeError(' TOC: no item type specified!')
         if self.toc is not None:
