@@ -13,7 +13,7 @@ Why use vs-code and markdown to write? Why write all this code?
 
 
 # Setup
-Setup python environment via the environment.yml file or manually install the necessary packages:
+Setup python environment via the environment.yml file or manually install the necessary packages in your python environment (I use Anaconda here):
 ```
     conda install -c anaconda pypandoc
     conda install -c anaconda pyyaml
@@ -134,7 +134,7 @@ To use, type "---" then click Ctrl+Space to get an em dash.
    ```
     docx | md | rtf | txt | json | html | epub | pdf
    ```
-
+   Note that I haven't done quality checks on the converted files, so if you run into issues with conversion, please check the pypandoc repo.
 
 # Control Tips
 

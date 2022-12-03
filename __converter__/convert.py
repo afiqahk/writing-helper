@@ -22,18 +22,19 @@ def parse_args():
         help="Format to convert to (without the dot '.'), e.g.: "
              " docx | md | rtf | txt | json |"
              " html | epub | pdf (output-only)")
-    group_output = parser.add_mutually_exclusive_group(required=True)
-    group_output.add_argument(
+    parser.add_argument(
         '--output', type=str,
         help="Path to output file e.g.:"
              " file in current directory, 'chapter1.md'"
              " file in another directory, 'book1/chapter1.md'"
              " full path, 'D:/chapter1.md'")
-    group_output.add_argument(
+    parser.add_argument(
         '--multi_output', type=str,
         help="Output folder if input is a pattern and you want separate output files"
              "e.g.: 'book1")
     args = parser.parse_args()
+    if args.output is None and args.multi_output is None:
+        raise SystemExit("Converter: must provide either 'output' or 'multi_output' option")
     return args
 
 def convert(input, format, output):
