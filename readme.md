@@ -1,14 +1,13 @@
 # General
 
-Write anything using vs-code and markdown, convert it to html for easy uploading to web.
-
+Write anything using vs-code and markdown.
 You can write snippets in separate files, organize everything via a table-of-contents and automatically merge into one document.
-Also includes converter code to convert from markdown (.md) to html (.html) for easier upload to some websites.
+Also allow conversion to multiple formats, from various input formats e.g. markdown (.md) to HTML (.html), Microsoft Documents (.docx) to Markdown (.md) and many more (see accepted formats below).
 
 Why use vs-code and markdown to write? Why write all this code?
 - Dark mode.
 - Can use Git to view file history, so I don't have to agonise over if I *really* want to delete a paragraph.
-- Easier to convert between formats.
+- Easier to convert between formats, especially HTML for uplaoding to some websites
 - Easier to customize the writing experience with extensions.
 - Easier to see what I want to include or not in one file (_toc.yaml) without having to delete or move contents.
 
@@ -34,9 +33,7 @@ Additional vs-code extensions to make life easier. These are not strictly necess
     HTML Related Links - rioj7
     Noctis - Liviu Schera
 ```
-HTML Related Links is needed for easily managing file links, so you can easily ctrl+click to open and create new files all from your _toc.yaml.
-
-Open your settings.json:
+HTML Related Links is needed for easily managing file links, so you can easily ctrl+click to open and create new files all from your _toc.yaml. For this, open your settings.json:
 ```
     Ctrl+Shift+P -> Preferences: Open Workspace Settings (JSON)
 ```
@@ -70,10 +67,10 @@ Then add to the .code-snippets file:
 ```
 To use, type "---" then click Ctrl+Space to get an em dash.
 
-# How to use
+# How to use this repo
 
 1. Create a folder for your story. This folder should contain all the files for this one story.
-2. Create a table-of-contents file (or copy from __template__ folder):
+2. Create a table-of-contents file (or copy from ```__template__``` folder):
    ```
     _toc.yaml
    ```
@@ -82,7 +79,7 @@ To use, type "---" then click Ctrl+Space to get an em dash.
    
    Each part has attribute *name* which is for your reference only, and *href* which is the link to the file with your writing. Organize parts by the order you want to merge the chapter.
    
-3. To merge, edit *config.yaml* with the folder name and chapter title you want to merge. Only one chapter can be merged at a time. Each part will be separated by a horizontal rule after emrging.
+3. To merge, edit *config.yaml* with the folder name and chapter title you want to merge. Only one chapter can be merged at a time. Each part will be separated by a horizontal rule after merging.
     ```
     merge:
         doc: FolderName     
@@ -92,14 +89,64 @@ To use, type "---" then click Ctrl+Space to get an em dash.
     ```
         python run.py merge
     ```
-    The resulting file will be in folder *```__out__```* as FolderName_ChapterTitle.md
-4. To convert
+    The resulting file will be in folder ```__out__``` as FolderName_ChapterTitle.md
+    
+4. To convert files into a different format, edit *config.yaml*. You can convert a single file, or multiple files at a time. Example for converting a single Markdown file in subfolder to a HTML file in the same folder:
+   ```
+    convert:
+        input: FolderName/FileName.md
+        format: "html"
+        output: FolderName/FileName.html
+   ```
+   Example for different folders:
+   ```
+    convert:
+        input: D:/path/to/FileName.md
+        format: "html"
+        output: C:/path/to/somewhere/else/FileName.html
+   ```
+   If converting multiple files, your input files must have the same pattern, e.g. *BookA_ch1.md*, *BookA_ch2.md*, *BookA_ch3.md* with the pattern being *BookA_ch\*.md*, and then you have two options for conversion:
+
+   Option one is convert and merge everything into one output file:
+   ```
+    convert:
+        input: FolderName/BookA_ch*.md
+        format: "html"
+        output: FolderName/BookA.html
+   ```
+   Option two is convert into separate output files. You must provide the folder name, and the output files will have the same name as the inputs:
+   ```
+    convert:
+        input: FolderName/BookA_ch*.md
+        format: "html"
+        multi_output: FolderName
+   ```
+   Finally after editing *config.yaml*, run the python code in command line:
+   ```
+    python run.py convert
+   ```
+
+   Accepted input formats:
+   ```
+    docx | md | rtf | txt | json | html | epub 
+   ```
+   Accepted output formats:
+   ```
+    docx | md | rtf | txt | json | html | epub | pdf
+   ```
+
+
+# Control Tips
+
+- Italics: ctrl + I
+- Bold: ctrl + B
+- Comment/Uncomment: ctrl + /
 
 # Files
 
 *```__converter__```*
 
-Scripts to convert markdown file to html.
+Scripts to convert files to different formats. Requires pypandoc.
 
 *```__generator__```*
 

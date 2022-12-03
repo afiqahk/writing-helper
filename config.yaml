@@ -1,9 +1,9 @@
 merge:
- doc: "__template__"     # required
- chapter: "loremipsum1"  # default: ""
+ doc: "__template__"     
+ chapter: "loremipsum1"  
 
 convert:
  input: "__out__/__template___loremipsum1.md"
  format: "html"
  output: "__out__/__template__loremipsum1.html"
- multi_output: "__out__"
+ multi_output: 

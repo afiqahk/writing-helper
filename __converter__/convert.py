@@ -22,14 +22,15 @@ def parse_args():
         help="Format to convert to (without the dot '.'), e.g.: "
              " docx | md | rtf | txt | json |"
              " html | epub | pdf (output-only)")
-    parser.add_argument(
-        '--output', type=str, required=True,
+    group_output = parser.add_mutually_exclusive_group(required=True)
+    group_output.add_argument(
+        '--output', type=str,
         help="Path to output file e.g.:"
              " file in current directory, 'chapter1.md'"
              " file in another directory, 'book1/chapter1.md'"
              " full path, 'D:/chapter1.md'")
-    parser.add_argument(
-        '--multi_output', type=str, default=None,
+    group_output.add_argument(
+        '--multi_output', type=str,
         help="Output folder if input is a pattern and you want separate output files"
              "e.g.: 'book1")
     args = parser.parse_args()
