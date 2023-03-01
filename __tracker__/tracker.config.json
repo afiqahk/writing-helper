@@ -1,0 +1,13 @@
+{
+    "last_updated":"",
+    "last_commit":"",
+    "data_file":"progress_tracker.csv",
+    "report_file":"progress_tracker.md",
+    "exclude_branches":[
+        "main", 
+        "initial", 
+        "feature_trackupdate", 
+        "fix_non_unicode"
+    ],
+    "exclude_files":[]
+}
