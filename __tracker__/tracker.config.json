@@ -1,6 +1,6 @@
 {
-    "last_updated":"",
-    "last_commit":"",
+    "last_checked":"",
+    "last_checked_datetime_isoformat":"",
     "data_file":"progress_tracker.csv",
     "report_file":"progress_tracker.md",
     "exclude_branches":[
