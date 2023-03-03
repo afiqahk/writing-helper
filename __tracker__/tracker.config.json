@@ -1,8 +1,9 @@
 {
     "last_checked":"",
     "last_checked_datetime_isoformat":"",
-    "data_file":"progress_tracker.csv",
-    "report_file":"progress_tracker.md",
+    "raw_data_file":"__tracker__/rawdata.csv",
+    "tracker_data_file":"__tracker__/tracker_data.csv",
+    "tracker_report_file":"tracker_report.md",
     "exclude_branches":[
         "main", 
         "initial", 
