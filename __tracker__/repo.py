@@ -73,7 +73,10 @@ def run():
     with open(CONFIG_FILE) as f:
         config = json.load(f)
     args = Namespace(**config)
-    rc = RepoCrawler()
-    rc.get_rawdata(args)
+    # rc = RepoCrawler()
+    # rc.get_rawdata(args)
+    prg = ProgressTracker()
+    prg.read_raw(args.tracker_rawdata_file)
+    prg.save_timeline(args.tracker_data_file, data_df=prg.get_timeline())
     assert True
     

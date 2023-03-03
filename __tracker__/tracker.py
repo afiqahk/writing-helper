@@ -1,4 +1,5 @@
 import pandas as pd
+import datetime
 
 class RawTrackerData:
     """ Data-only class
@@ -14,22 +15,46 @@ class RawTrackerData:
         self.diff_is_new_file = []
         self.diff_is_deleted_file = []
 
-class TrackerData:
-    def __init__(self):
-        self.commit_date = [] #columns
-        self.file = [] #rows
-        self.wordcount = [] #data
-
 class ProgressTracker:
     def __init__(self):
         self.rawdata = RawTrackerData()
+        self.data = pd.DataFrame()
     
     def get_rawdata_column_names(self):
         return list(vars(self.rawdata).keys())
     
-    def save_raw(self, path):
-        df = pd.DataFrame(data=vars(self.rawdata))
+    def save_raw(self, path, descendbydate=True):
+        df = pd.DataFrame(data=vars(self.rawdata))        
+        if descendbydate:
+            df.sort_values(by=["commit_datetime"], ascending=True, inplace=True)
         df.to_csv(path, mode='a', header=not is_datafile_empty(path))
+    
+    def read_raw(self, path):
+        df = pd.read_csv(path)
+        for key, item in df.to_dict().items():
+            setattr(self.rawdata, key, item)
+        return df
+    
+    def get_unique_files(self, rawdata=None):
+        if rawdata is None:
+            rawdata = self.rawdata
+        return list(dict.fromkeys(rawdata.diff_file))
+    
+    def get_timeline(self, rawdata=None):
+        if rawdata is None:
+            rawdata = self.rawdata
+        df = pd.DataFrame(data={
+            "commit_datetime": rawdata.commit_datetime,
+            "diff_wordcount": rawdata.diff_wordcount,
+        })
+        df_date_col = df["commit_datetime"].apply(datetime.datetime.fromisoformat).apply(lambda x: x.date().isoformat())
+        df.insert(loc=0, column="commit_date", value=df_date_col)
+        return df.drop("commit_datetime", axis="columns").groupby("commit_date")["diff_wordcount"].sum()
+    
+    def save_timeline(self, path, data_df=None):
+        if data_df is None:
+            data_df = self.data
+        data_df.to_csv(path, mode='a', header=not is_datafile_empty(path))
 
 def is_datafile_empty(path):
     try:
