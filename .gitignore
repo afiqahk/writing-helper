@@ -4,6 +4,9 @@ __out__/
 .vscode/
 *.zip
 
+# local data
+__tracker__/*.csv
+
 # python
 __pycache__/
 *.py[cod]

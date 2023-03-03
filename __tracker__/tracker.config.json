@@ -1,7 +1,7 @@
 {
     "last_checked":"",
     "last_checked_datetime_isoformat":"",
-    "raw_data_file":"__tracker__/rawdata.csv",
+    "tracker_rawdata_file":"__tracker__/tracker_rawdata.csv",
     "tracker_data_file":"__tracker__/tracker_data.csv",
     "tracker_report_file":"tracker_report.md",
     "exclude_branches":[
