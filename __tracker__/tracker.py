@@ -36,9 +36,9 @@ def is_datafile_empty(path):
         pd.read_csv(path, index_col=0, nrows=0)
         return True
     except pd.errors.EmptyDataError as e:
-        print(f"Empty file '{path}': {e}")
+        pass
     except OSError as e:
-        print(f"Unable to open file: {e}")
+        pass
     return False
         
     
