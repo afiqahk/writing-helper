@@ -60,7 +60,7 @@ class ProgressTracker:
         data_df.to_csv(path, mode='a', header=not is_datafile_empty(path))
     
     def read_timeline(self, path):
-        self.data = pd.read_csv(path)
+        self.data = pd.read_csv(path, index_col=0)
         return self.data
 
     def print_timeline_pretty(self, df=None, by_month=False, by_week=False):
