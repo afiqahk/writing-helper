@@ -63,24 +63,6 @@ class ProgressTracker:
         self.data = pd.read_csv(path, index_col=0)
         return self.data
 
-    def print_timeline_pretty(self, df=None, by_month=False, by_week=False):
-        if df is None:
-            df = self.data
-        df.index = pd.DatetimeIndex(df.index)
-        if by_month:
-            df = df.resample("MS").agg({
-                "diff_wordcount": "sum",
-                "diff_file" : lambda x: ',\n'.join(x)
-                })
-        elif by_week:
-            df = df.resample("W").agg({
-                "diff_wordcount": "sum",
-                "diff_file" : lambda x: ',\n'.join(x)
-                })
-        else:
-            df_idx_new = pd.date_range(df.index.min, df.index.max, freq='D')
-            df = df.reindex(df_idx_new)
-
 def is_datafile_empty(path):
     try:
         pd.read_csv(path, index_col=0, nrows=0)

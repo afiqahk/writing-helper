@@ -6,6 +6,7 @@ import datetime
 import pandas as pd
 from argparse import Namespace
 from __tracker__.tracker import ProgressTracker
+from __tracker__.plotter import ProgressTrackerPlotter
 
 CONFIG_FILE = "./__tracker__/tracker.config.json"
 
@@ -76,7 +77,12 @@ def run():
     # rc = RepoCrawler()
     # rc.get_rawdata(args)
     prg = ProgressTracker()
-    prg.read_raw(args.tracker_rawdata_file)
-    prg.save_timeline(args.tracker_data_file, data_df=prg.get_timeline())
+    # prg.read_raw(args.tracker_rawdata_file)
+    # prg.save_timeline(args.tracker_data_file, data_df=prg.get_timeline())
+    df = prg.read_timeline(args.tracker_data_file)
+    ptp = ProgressTrackerPlotter()
+    # ptp.plot_line_by_week(df)
+    # ptp.plot_line_by_day(df)
+    ptp.plot_line_by_month(df)
     assert True
     
