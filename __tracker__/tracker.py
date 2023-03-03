@@ -47,9 +47,8 @@ class ProgressTracker:
             "commit_datetime": rawdata.commit_datetime,
             "diff_wordcount": rawdata.diff_wordcount,
         })
-        df_date_col = df["commit_datetime"].apply(datetime.datetime.fromisoformat).apply(lambda x: x.date().isoformat())
-        df.insert(loc=0, column="commit_date", value=df_date_col)
-        return df.drop("commit_datetime", axis="columns").groupby("commit_date")["diff_wordcount"].sum()
+        df["commit_date"] = df["commit_datetime"].apply(datetime.datetime.fromisoformat).apply(lambda x: x.date().isoformat())
+        return df.drop("commit_datetime", axis="columns").groupby("commit_date", as_index=True)["diff_wordcount"].sum()
     
     def save_timeline(self, path, data_df=None):
         if data_df is None:
