@@ -6,6 +6,7 @@ __out__/
 
 # local data
 __tracker__/*.csv
+tracker_report.html
 
 # python
 __pycache__/
