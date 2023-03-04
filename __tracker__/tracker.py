@@ -47,20 +47,27 @@ class ProgressTracker:
             "commit_datetime": rawdata.commit_datetime,
             "diff_wordcount": rawdata.diff_wordcount,
             "diff_file": rawdata.diff_file,
+            "branch": rawdata.branch,
         })
         df["commit_date"] = df["commit_datetime"].apply(datetime.datetime.fromisoformat).apply(lambda x: x.date().isoformat())
         return df.drop("commit_datetime", axis="columns").groupby("commit_date", as_index=True).agg({
             "diff_wordcount": "sum",
-            "diff_file" : lambda x: ',\n'.join(x)
+            "diff_file" : lambda x: set(x),
+            "branch" : lambda x: set(x),
         })
     
     def save_timeline(self, path, data_df=None):
         if data_df is None:
             data_df = self.data
+        data_df.diff_file = data_df.diff_file.apply(lambda x: ",\n".join(x))
+        data_df.branch = data_df.branch.apply(lambda x: ",\n".join(x))
         data_df.to_csv(path, mode='a', header=not is_datafile_empty(path))
     
     def read_timeline(self, path):
-        self.data = pd.read_csv(path, index_col=0)
+        df = pd.read_csv(path, index_col=0)
+        df.diff_file = df.diff_file.apply(lambda x: x.split(",\n"))
+        df.branch = df.branch.apply(lambda x: x.split(",\n"))
+        self.data = df
         return self.data
 
 def is_datafile_empty(path):
