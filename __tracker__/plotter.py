@@ -75,7 +75,9 @@ class ProgressTrackerPlotter:
     
     def plot_line(self, df):
         self.rename_columns(df)
-        fig = px.line(df, x=df.index, y="wordcount", markers=True, hover_name="branch", hover_data=["file"])
+        fig = px.area(df, x=df.index, y="wordcount", 
+                      markers=True,
+                      hover_name="branch", hover_data=["file"])
         return fig
 
 def figures_to_html(figs, filename="dashboard.html"):
