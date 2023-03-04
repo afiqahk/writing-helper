@@ -1,14 +1,14 @@
 {
-    "last_checked":"",
-    "last_checked_datetime_isoformat":"",
-    "tracker_rawdata_file":"__tracker__/tracker_rawdata.csv",
-    "tracker_data_file":"__tracker__/tracker_data.csv",
-    "tracker_report_file":"tracker_report.html",
-    "exclude_branches":[
-        "main", 
-        "initial", 
-        "feature_trackupdate", 
+    "last_checked_date": "2023-03-05",
+    "last_checked_datetime_isoformat": "2023-03-05T04:21:50+08:00",
+    "tracker_rawdata_file": "__tracker__/tracker_rawdata.csv",
+    "tracker_data_file": "__tracker__/tracker_data.csv",
+    "tracker_report_file": "tracker_report.html",
+    "exclude_branches": [
+        "main",
+        "initial",
+        "feature_trackupdate",
         "fix_non_unicode"
     ],
-    "exclude_files":[]
+    "exclude_files": "NOT IMPLEMENTED. Files starting with or inside folders starting with '.' (period), '_' (underscore) or '__' (double underscore) will be automatically filtered out"
 }

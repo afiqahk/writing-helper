@@ -87,6 +87,8 @@ def figures_to_html(figs, filename="dashboard.html"):
         dashboard.write("</body></html>" + "\n")
 
 def plot_and_save_html_report(html_path, df_timeline):
+    if df_timeline.empty:
+        raise ValueError("Empty tracker data dataframe!")
     figs = []
     fig_titles = [ f"Word count per {t}" for t in ["day", "week", "month"] ]
     ptp = ProgressTrackerPlotter()
