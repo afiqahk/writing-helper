@@ -19,6 +19,18 @@ class RepoCrawler:
     def get_diff_between_commits(self, commit, commit_prev):
         diffs = [ d for d in commit_prev.diff(commit) if d.change_type in self.change_type_to_check]
         return diffs
+    
+    def filter_diffs(self, diffs):
+        diffs_new = []
+        for d in diffs:
+            assert (d.a_path or d.b_path)
+            assert(d.a_path == d.b_path)
+            path = d.a_path if d.a_path else d.b_path
+            regex = re.compile( r"^(\.|\_\_|\_)" )
+            regex_matches = list( filter(regex.match, pathlib.Path(path).parts) )
+            if (not regex_matches) and (path.endswith(".md")) and (not path.endswith("readme.md")):
+                diffs_new.append(d)
+        return diffs_new    
 
     def get_commits_since(self, branchname, since_datetime=None):
         repo = self.repo
@@ -48,8 +60,6 @@ class RepoCrawler:
 
     def get_rawdata(self, args):
         prg = ProgressTracker()
-        repo = self.repo
-        args.last_checked_datetime_isoformat = "2022-12-21T15:26:04+08:00"
         branches = self.get_branches(args.exclude_branches)
         for branch in branches:
             commits = self.get_commits_since(branch.name, args.last_checked_datetime_isoformat)
@@ -57,6 +67,7 @@ class RepoCrawler:
                 newer_commit = commits[i - 1]
                 older_commit = commits[i]
                 diffs = self.get_diff_between_commits(newer_commit, older_commit)
+                diffs = self.filter_diffs(diffs)
                 for diff in diffs:
                     prg.rawdata.branch.append(branch)
                     prg.rawdata.commit_datetime.append(newer_commit.committed_datetime.isoformat())
