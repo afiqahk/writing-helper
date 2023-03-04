@@ -66,6 +66,8 @@ class RepoCrawler:
             for i in range(1, len(commits)):
                 newer_commit = commits[i - 1]
                 older_commit = commits[i]
+                if (branch.name not in newer_commit.name_rev) or (branch.name not in older_commit.name_rev):
+                    continue
                 diffs = self.get_diff_between_commits(newer_commit, older_commit)
                 diffs = self.filter_diffs(diffs)
                 for diff in diffs:
