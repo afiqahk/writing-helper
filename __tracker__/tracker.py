@@ -44,11 +44,18 @@ def run():
     with tm.open() as args:
         prg = ProgressTracker()
         rc = RepoCrawler()
+        print("Getting raw data from git repo...")
         rc.get_rawdata(prg.rawdata, args.exclude_branches, args.last_checked_datetime_isoformat)
         prg.save_raw(args.tracker_rawdata_file)
+        print(f"...Saved to '{args.tracker_rawdata_file}'")
+        
+        print("Getting tracker data from raw data...")
         prg.read_raw(args.tracker_rawdata_file)
         prg.save_timeline(args.tracker_data_file, data_df=prg.get_timeline())
+        print(f"...Saved to '{args.tracker_data_file}'")
+        
+        print(f"Drawing tracker data report...")
         df = prg.read_timeline(args.tracker_data_file)
         plot_and_save_html_report(args.tracker_report_file, df)
-        print("Finished. Open 'tracker_report.html' in browser (right-click on file)")
+        print(f"...Finished. Open '{args.tracker_report_file}' in browser (right-click on file)")
     return

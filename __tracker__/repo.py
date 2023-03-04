@@ -1,6 +1,7 @@
 from git import Repo
 import pathlib
 import re
+from tqdm import tqdm
 
 class RepoCrawler:
     def __init__(self, repo_dir=""):
@@ -54,9 +55,15 @@ class RepoCrawler:
 
     def get_rawdata(self, rawdata, exclude_branches=[], last_checked_datetime_isoformat=""):
         branches = self.get_branches(exclude_branches)
-        for branch in branches:
+        for branch in tqdm(branches,
+                           desc = "Checking branch",
+                           unit = "branches",
+                           ):
             commits = self.get_commits_since(branch.name, last_checked_datetime_isoformat)
-            for i in range(1, len(commits)):
+            for i in tqdm( range(1, len(commits)),
+                          desc = f"branch {branch.name}",
+                          unit = " commits",
+                        ):
                 newer_commit = commits[i - 1]
                 older_commit = commits[i]
                 if (branch.name not in newer_commit.name_rev) or (branch.name not in older_commit.name_rev):
