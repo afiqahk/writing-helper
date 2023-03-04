@@ -3,6 +3,7 @@ import json
 import datetime
 import contextlib
 import pathlib
+import shutil
 import traceback
 from __tracker__.progresstracker import ProgressTracker
 from __tracker__.repo import RepoCrawler
@@ -11,6 +12,7 @@ from __tracker__.plotter import plot_and_save_html_report
 class TrackerManager:
     def __init__(self) -> None:
         self.config_file = "./__tracker__/tracker.config.json"
+        self.data_file_fields = ["tracker_data_file", "tracker_rawdata_file"]
         self.config = {}
     
     def config_load(self):
@@ -26,17 +28,32 @@ class TrackerManager:
         with open(self.config_file, "w") as f:
             json.dump(self.config, f, indent=4)
     
+    def backup_data_files(self):
+        data_files = [ self.config[x] for x in self.data_file_fields ]
+        for f in data_files:
+            p = pathlib.Path(f)
+            if p.exists():
+                shutil.copy(p, pathlib.Path(f"{f}.bkup"))
+        
+    def restore_data_files(self):
+        data_files = [ self.config[x] for x in self.data_file_fields ]
+        for f in data_files:
+            pathlib.Path(f).unlink(missing_ok=True)
+            p_bkup = pathlib.Path(f"{f}.bkup")
+            if p_bkup.exists():
+                p_bkup.rename(f)
+    
     @contextlib.contextmanager
     def open(self):
         args = self.config_load()
+        self.backup_data_files()
         try:
             yield args
             self.config_update()
         except Exception as e:
             print(traceback.format_exc())
             print(f"Error: {e}")
-            pathlib.Path(self.config["tracker_data_file"]).unlink(missing_ok=True)
-            pathlib.Path(self.config["tracker_rawdata_file"]).unlink(missing_ok=True)
+            self.restore_data_files()
 
 
 def run():
