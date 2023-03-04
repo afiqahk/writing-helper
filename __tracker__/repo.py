@@ -1,14 +1,6 @@
 from git import Repo
 import pathlib
-import json
 import re
-import datetime
-import pandas as pd
-from argparse import Namespace
-from __tracker__.tracker import ProgressTracker
-from __tracker__.plotter import plot_and_save_html_report
-
-CONFIG_FILE = "./__tracker__/tracker.config.json"
 
 class RepoCrawler:
     def __init__(self, repo_dir=""):
@@ -56,13 +48,14 @@ class RepoCrawler:
         return b_wordcount - a_wordcount
 
     def get_branches(self, excludes=[]):
+        if not isinstance(excludes, list):
+            excludes = []
         return [ b for b in self.repo.branches if b.name not in excludes ]
 
-    def get_rawdata(self, args):
-        prg = ProgressTracker()
-        branches = self.get_branches(args.exclude_branches)
+    def get_rawdata(self, rawdata, exclude_branches=[], last_checked_datetime_isoformat=""):
+        branches = self.get_branches(exclude_branches)
         for branch in branches:
-            commits = self.get_commits_since(branch.name, args.last_checked_datetime_isoformat)
+            commits = self.get_commits_since(branch.name, last_checked_datetime_isoformat)
             for i in range(1, len(commits)):
                 newer_commit = commits[i - 1]
                 older_commit = commits[i]
@@ -71,28 +64,13 @@ class RepoCrawler:
                 diffs = self.get_diff_between_commits(newer_commit, older_commit)
                 diffs = self.filter_diffs(diffs)
                 for diff in diffs:
-                    prg.rawdata.branch.append(branch)
-                    prg.rawdata.commit_datetime.append(newer_commit.committed_datetime.isoformat())
-                    prg.rawdata.commit_hexsha.append(newer_commit.hexsha)
-                    prg.rawdata.diff_file.append(diff.a_path)
-                    prg.rawdata.diff_wordcount.append(self.get_diff_wordcount(diff))
-                    prg.rawdata.diff_is_renamed.append(diff.renamed)
-                    prg.rawdata.diff_is_renamed_file.append(diff.renamed_file)
-                    prg.rawdata.diff_is_new_file.append(diff.new_file)
-                    prg.rawdata.diff_is_deleted_file.append(diff.deleted_file)
-        prg.save_raw(args.tracker_rawdata_file)
-        return
-
-def run():
-    with open(CONFIG_FILE) as f:
-        config = json.load(f)
-    args = Namespace(**config)
-    # rc = RepoCrawler()
-    # rc.get_rawdata(args)
-    prg = ProgressTracker()
-    # prg.read_raw(args.tracker_rawdata_file)
-    # prg.save_timeline(args.tracker_data_file, data_df=prg.get_timeline())
-    df = prg.read_timeline(args.tracker_data_file)
-    plot_and_save_html_report(args.tracker_report_file, df)
-    assert True
-    
+                    rawdata.branch.append(branch)
+                    rawdata.commit_datetime.append(newer_commit.committed_datetime.isoformat())
+                    rawdata.commit_hexsha.append(newer_commit.hexsha)
+                    rawdata.diff_file.append(diff.a_path)
+                    rawdata.diff_wordcount.append(self.get_diff_wordcount(diff))
+                    rawdata.diff_is_renamed.append(diff.renamed)
+                    rawdata.diff_is_renamed_file.append(diff.renamed_file)
+                    rawdata.diff_is_new_file.append(diff.new_file)
+                    rawdata.diff_is_deleted_file.append(diff.deleted_file)
+        return rawdata
