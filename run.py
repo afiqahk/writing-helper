@@ -3,6 +3,7 @@ import argparse
 
 from __generator__ import generate
 from __converter__ import convert
+from __tracker__ import track
 
 def parse_args():
     """Parse input arguments."""
@@ -10,7 +11,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description=desc)
     parser.add_argument(
         'command', type=str,
-        help="Command to run [ convert | merge ]")
+        help="Command to run [ convert | merge | track ]")
     args = parser.parse_args()
     return args
 
@@ -22,6 +23,8 @@ def main():
         generate.run(**config['merge'])
     elif args.command == 'convert':
         convert.run(**config['convert'])
+    elif args.command == 'track':
+        track.run()
     else:
         raise SystemExit(f"ERROR: Invalid command {args.command}")
 
