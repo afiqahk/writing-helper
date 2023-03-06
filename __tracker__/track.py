@@ -12,14 +12,46 @@ from __tracker__.plotter import plot_and_save_html_report
 class TrackerManager:
     def __init__(self) -> None:
         self.config_file = "./__tracker__/tracker.config.json"
+        self.config_fields_with_defaults = {
+            "tracker_rawdata_file" : "__tracker__/tracker_rawdata.csv",
+            "tracker_data_file": "__tracker__/tracker_data.csv",
+            "tracker_report_file": "tracker_report.html",
+        }
         self.data_file_fields = ["tracker_data_file", "tracker_rawdata_file"]
         self.config = {}
     
     def config_load(self):
+        print(f"Loading tracker config file '{self.config_file}'...")
         with open(self.config_file, "r") as f:
             config = json.load(f)
         self.config = config
+        self.config_check()
+        print("...Finished loading")
         return Namespace(**config)
+    
+    def config_check(self):
+        field = "last_checked_datetime_isoformat"
+        if self.config[field]:
+            try:
+                datetime.datetime.fromisoformat(self.config[field])
+            except ValueError:
+                message = (
+                    f"...Field '{field}' must be in correct ISO format e.g.\n"
+                    f"    '2023-03-05' (YYYY-MM-DD),\n"
+                    f"    '2023-03-05T06:21:30+08:00' (YYYY-MM-DD separator HH:MM:SS Timezone),\n"
+                    f"    '2023-03-05 06:21:30' (YYYY-MM-DD HH:MM:SS - will default to UTC timezone),\n"
+                    )
+                raise Exception(message)
+            
+        for field, default in self.config_fields_with_defaults.items():
+            if not self.config[field]:
+                print(f"...Field '{field}' cannot be empty. Using default value '{default}'")
+                self.config[field] = default
+        
+        field = "exclude_branches"
+        if not isinstance(self.config[field], list):
+            message = (f"...Field '{field}' must be a list e.g. ['main', 'initial']")
+            raise Exception(message)
     
     def config_update(self):
         completed_datetime = datetime.datetime.now().astimezone()
@@ -50,7 +82,11 @@ class TrackerManager:
     
     @contextlib.contextmanager
     def open(self):
-        args = self.config_load()
+        try:
+            args = self.config_load()
+        except Exception as e:
+            print(e)
+            exit()
         self.backup_data_files()
         try:
             yield args
