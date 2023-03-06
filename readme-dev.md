@@ -77,6 +77,8 @@ And then to update the branch name on your other devices:
 ```
     git fetch --prune
     git branch -m <old_name> <new_name>
+    git branch --unset-upstream <new_name>
+    git branch --set-upstream-to origin/<new_name> <new_name>
 ```
 
 
