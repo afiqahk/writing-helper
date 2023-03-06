@@ -12,6 +12,12 @@ def parse_args():
     parser.add_argument(
         'command', type=str,
         help="Command to run [ convert | merge | track ]")
+    parser.add_argument(
+        '--clean', action="store_true",
+        help=("If command==tracker, reset tracker."
+        " This will delete tracker data files and"
+        " the next run of tracker will get commits from the start of the repo")
+    )
     args = parser.parse_args()
     return args
 
@@ -24,7 +30,12 @@ def main():
     elif args.command == 'convert':
         convert.run(**config['convert'])
     elif args.command == 'track':
-        track.run()
+        if args.clean:
+            track.clean()
+        else:
+            track.run()
+            print()
+            print(f"Note: To reset all tracker data, run 'python run.py track --clean'")
     else:
         raise SystemExit(f"ERROR: Invalid command {args.command}")
 

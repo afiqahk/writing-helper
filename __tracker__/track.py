@@ -12,12 +12,25 @@ from __tracker__.plotter import plot_and_save_html_report
 class TrackerManager:
     def __init__(self) -> None:
         self.config_file = "./__tracker__/tracker.config.json"
-        self.config_fields_with_defaults = {
+        self.datafile_fields = {
             "tracker_rawdata_file" : "__tracker__/tracker_rawdata.csv",
             "tracker_data_file": "__tracker__/tracker_data.csv",
             "tracker_report_file": "tracker_report.html",
         }
-        self.data_file_fields = ["tracker_data_file", "tracker_rawdata_file"]
+        self.default_config = {
+            "last_checked_date": "",
+            "last_checked_datetime_isoformat": "",
+            "tracker_rawdata_file": "__tracker__/tracker_rawdata.csv",
+            "tracker_data_file": "__tracker__/tracker_data.csv",
+            "tracker_report_file": "tracker_report.html",
+            "exclude_branches": [
+                "main",
+                "initial",
+                "feature_trackupdate",
+                "fix_non_unicode"
+            ],
+            "exclude_files": "NOT IMPLEMENTED. Files starting with or inside folders starting with '.' (period), '_' (underscore) or '__' (double underscore) will be automatically filtered out"
+        }
         self.config = {}
     
     def config_load(self):
@@ -26,7 +39,7 @@ class TrackerManager:
             config = json.load(f)
         self.config = config
         self.config_check()
-        print("...Finished loading")
+        print("...Finished loading tracker config file")
         return Namespace(**config)
     
     def config_check(self):
@@ -43,7 +56,7 @@ class TrackerManager:
                     )
                 raise Exception(message)
             
-        for field, default in self.config_fields_with_defaults.items():
+        for field, default in self.datafile_fields.items():
             if not self.config[field]:
                 print(f"...Field '{field}' cannot be empty. Using default value '{default}'")
                 self.config[field] = default
@@ -53,22 +66,25 @@ class TrackerManager:
             message = (f"...Field '{field}' must be a list e.g. ['main', 'initial']")
             raise Exception(message)
     
-    def config_update(self):
-        completed_datetime = datetime.datetime.now().astimezone()
-        self.config["last_checked_datetime_isoformat"] = completed_datetime.isoformat(timespec="seconds")
-        self.config["last_checked_date"] = completed_datetime.date().isoformat()        
+    def config_update(self, new_config={}):
+        if new_config:
+            self.config = new_config
+        else:
+            completed_datetime = datetime.datetime.now().astimezone()
+            self.config["last_checked_datetime_isoformat"] = completed_datetime.isoformat(timespec="seconds")
+            self.config["last_checked_date"] = completed_datetime.date().isoformat()
         with open(self.config_file, "w") as f:
             json.dump(self.config, f, indent=4)
     
     def backup_data_files(self):
-        data_files = [ self.config[x] for x in self.data_file_fields ]
+        data_files = [ self.config[x] for x in self.datafile_fields.keys() ]
         for f in data_files:
             p = pathlib.Path(f)
             if p.exists():
                 shutil.copy(p, pathlib.Path(f"{f}.bkup"))
         
     def restore_data_files(self):
-        data_files = [ self.config[x] for x in self.data_file_fields ]
+        data_files = [ self.config[x] for x in self.datafile_fields.keys() ]
         for f in data_files:
             pathlib.Path(f).unlink(missing_ok=True)
             p_bkup = pathlib.Path(f"{f}.bkup")
@@ -76,7 +92,7 @@ class TrackerManager:
                 p_bkup.rename(f)
     
     def delete_backup_files(self):
-        data_files = [ self.config[x] for x in self.data_file_fields ]
+        data_files = [ self.config[x] for x in self.datafile_fields.keys() ]
         for f in data_files:
             pathlib.Path(f"{f}.bkup").unlink(missing_ok=True)
     
@@ -96,6 +112,16 @@ class TrackerManager:
             print(f"Error: {e}")
             self.restore_data_files()
         self.delete_backup_files()
+
+def clean():
+    tm = TrackerManager()
+    tm.config_load()
+    print("Cleaning up tracker files...")
+    for filetype in tm.datafile_fields.keys():
+        pathlib.Path(tm.config[filetype]).unlink(missing_ok=True)
+        print(f"...Deleted {filetype} at '{tm.config[filetype]}'")
+    tm.config_update(tm.default_config)
+    print("...Resetted config file to defaults")
 
 def run():
     tm = TrackerManager()
