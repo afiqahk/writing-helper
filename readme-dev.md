@@ -68,22 +68,15 @@ If you need to restore this feature branch later:
 
 Renaming a local branch is pretty simple, but renaming the remote not so simple:
 ```
-    # Rename the local branch to the new name
     git branch -m <old_name> <new_name>
-
-    # Delete the old branch on remote e.g. origin
     git push origin --delete <old_name>
-
-    # Prevent git from using the old name when pushing in the next step.
-    # Otherwise, git will use the old upstream name instead of <new_name>.
     git branch --unset-upstream <new_name>
-
-    # Push the new branch to remote
-    git push origin <new_name>
-
-    # Reset the upstream branch for the new_name local branch
     git push origin -u <new_name>
 ```
-
+And then to update the branch name on your other devices:
+```
+    git fetch --prune
+    git branch -m <old_name> <new_name>
+```
 
 
