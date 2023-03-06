@@ -63,8 +63,11 @@ def run():
         rc = RepoCrawler()
         print("Getting raw data from git repo...")
         rc.get_rawdata(prg.rawdata, args.exclude_branches, args.last_checked_datetime_isoformat)
-        prg.save_raw(args.tracker_rawdata_file)
-        print(f"...Saved to '{args.tracker_rawdata_file}'")
+        if prg.rawdata.empty():
+            print(f"...No new commits found")
+        else:
+            prg.save_raw(args.tracker_rawdata_file)
+            print(f"...Saved to '{args.tracker_rawdata_file}'")
         
         print("Getting tracker data from raw data...")
         prg.read_raw(args.tracker_rawdata_file)

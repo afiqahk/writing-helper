@@ -14,6 +14,13 @@ class RawTrackerData:
         self.diff_is_renamed_file = []
         self.diff_is_new_file = []
         self.diff_is_deleted_file = []
+    
+    def empty(self):
+        items = vars(self).items()
+        for _,l in items:
+            if l:
+                return False
+        return True 
 
 class ProgressTracker:
     def __init__(self):
