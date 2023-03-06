@@ -43,6 +43,11 @@ class TrackerManager:
             if p_bkup.exists():
                 p_bkup.rename(f)
     
+    def delete_backup_files(self):
+        data_files = [ self.config[x] for x in self.data_file_fields ]
+        for f in data_files:
+            pathlib.Path(f"{f}.bkup").unlink(missing_ok=True)
+    
     @contextlib.contextmanager
     def open(self):
         args = self.config_load()
@@ -54,7 +59,7 @@ class TrackerManager:
             print(traceback.format_exc())
             print(f"Error: {e}")
             self.restore_data_files()
-
+        self.delete_backup_files()
 
 def run():
     tm = TrackerManager()
