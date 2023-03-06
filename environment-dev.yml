@@ -1,0 +1,17 @@
+name: writing
+channels:
+  - anaconda
+  - conda-forge
+  - defaults
+dependencies:
+  - debugpy=1.6.6
+  - git=2.34.1
+  - pandas=1.5.2
+  - pip=21.2.4
+  - plotly=5.9.0
+  - pypandoc=1.8.1
+  - python=3.10
+  - pyyaml=6.0
+  - tqdm=4.64.1
+  - pip:
+    - gitpython~=3.1.31
