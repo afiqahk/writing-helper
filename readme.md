@@ -13,25 +13,33 @@ Why use vs-code and markdown to write? Why write all this code?
 
 
 # Setup
-Setup python environment via the environment.yml file or manually install the necessary packages in your python environment (I use Anaconda here):
+Setup python environment via the environment.yml file:
+```
+    conda env create -f environment.yml
+```
+Or manually install the necessary packages in your python environment (I use Anaconda here):
 ```
     conda install -c anaconda pypandoc
     conda install -c anaconda pyyaml
 ```
 
-Recommended vs-code extensions for best experience. These helps in running the python code and formatting your files and so on. Without the last one you can't use Ctrl+I for *italics*:
+Required vs-code extension:
 ```
     Python - Microsoft
-    YAML - Red Hat
-    Markdown All in One - Yu Zhang
+```
+
+Recommended vs-code extensions for best experience:
+```
+    YAML - Red Hat (check for errors in config files)
+    Markdown All in One - Yu Zhang (for markdown shortcuts e.g. Ctrl+I for *italics*)
+    HTML Preview - George Oliveira (for previewing or opening html files in browser (right-click))
 ```
 
 Additional vs-code extensions to make life easier. These are not strictly necessary, but is nice to have. *Noctis* is the nicest vs-code themes extension I've found fit for me, but there are many others in the Extensions Marketplace if you filter Category -> Themes.
 ```
-    HTML Preview - George Oliveira
-    Word Count - Microsoft
-    HTML Related Links - rioj7
-    Noctis - Liviu Schera
+    Word Count - Microsoft (show word count of current file)
+    HTML Related Links - rioj7  (easily create new file - see below)
+    Noctis - Liviu Schera (layout theme)
 ```
 HTML Related Links is needed for easily managing file links, so you can easily ctrl+click to open and create new files all from your _toc.yaml. For this, open your settings.json:
 ```
@@ -135,6 +143,13 @@ To use, type "---" then click Ctrl+Space to get an em dash.
     docx | md | rtf | txt | json | html | epub | pdf
    ```
    Note that I haven't done quality checks on the converted files, so if you run into issues with conversion, please check the pypandoc repo.
+
+## Track your progress
+
+If you use git to keep track of your files, you can check the updated word count each day/week/month. This will generate charts of word count per time as HTML file in the current directory, 'tracker_report.html' which you can right-click to open in browser (if you have the *HTML Preview* vscode extension - see above in *Setup*)
+```
+    python run.py track
+```
 
 # Control Tips
 
