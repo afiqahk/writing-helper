@@ -61,7 +61,7 @@ class ProgressTracker:
             data_df = self.data
         data_df.diff_file = data_df.diff_file.apply(lambda x: ",\n".join(x))
         data_df.branch = data_df.branch.apply(lambda x: ",\n".join(x))
-        data_df.to_csv(path, mode='a', header=not is_datafile_empty(path))
+        data_df.to_csv(path, mode='w')
     
     def read_timeline(self, path):
         df = pd.read_csv(path, index_col=0)
