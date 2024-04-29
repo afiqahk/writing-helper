@@ -6,8 +6,9 @@ Also allow conversion to multiple formats, from various input formats e.g. markd
 
 Why use vs-code and markdown to write? Why write all this code?
 - Dark mode.
+- Easily switch between different writing contexts using Git branches
 - Can use Git to view file history, so I don't have to agonise over if I *really* want to delete a paragraph.
-- Easier to convert between formats, especially HTML for uplaoding to some websites
+- Easier to convert between formats
 - Easier to customize the writing experience with extensions.
 - Easier to see what I want to include or not in one file (_toc.yaml) without having to delete or move contents.
 
